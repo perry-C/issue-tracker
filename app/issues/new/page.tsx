@@ -5,7 +5,6 @@ import { TextField, Button } from '@radix-ui/themes';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 
-<SimpleMDE />;
 const NewIssuePage = () => {
     return (
         <div className='max-w-xl space-y-3'>
