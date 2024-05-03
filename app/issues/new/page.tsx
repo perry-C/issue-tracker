@@ -2,54 +2,50 @@
 
 import 'easymde/dist/easymde.min.css';
 
-import { Button, Callout, TextField } from '@radix-ui/themes';
+import { Button, TextField } from '@radix-ui/themes';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import React, { useState } from 'react';
 
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import ErrorMessage from '@/app/ErrorMessage';
 import SimpleMDE from 'react-simplemde-editor';
 import axios from 'axios';
+import { createIssueSchema } from '@/app/validationSchemas';
 import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-type Inputs = { title: string; description: string };
+type IssueForm = z.infer<typeof createIssueSchema>;
+// type Inputs = { title: string; description: string };
 
 const NewIssuePage = () => {
     const router = useRouter();
 
-    const { register, control, handleSubmit } = useForm<Inputs>();
-    const [error, setError] = useState<any>();
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        try {
-            await axios.post('/api/issues', data);
-            router.push('/issues');
-        } catch (error) {
-            setError(error);
-        }
+    const {
+        register,
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IssueForm>({
+        resolver: zodResolver(createIssueSchema),
+    });
+    const onSubmit: SubmitHandler<IssueForm> = async (data) => {
+        await axios.post('/api/issues', data);
+        router.push('/issues');
     };
 
-    const ErrorMessages = () => {
-        return error.response.data.map((res: any) => {
-            return (
-                <Callout.Root color='red' role='alert'>
-                    <Callout.Icon>
-                        <ExclamationTriangleIcon />
-                    </Callout.Icon>
-                    <Callout.Text>{res.message}</Callout.Text>
-                </Callout.Root>
-            );
-        });
-    };
     return (
         <div>
             <form
                 className='max-w-xl space-y-3'
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <ErrorMessages></ErrorMessages>
                 <TextField.Root
                     placeholder='Add new issue'
                     {...register('title')}
                 ></TextField.Root>
+
+                {errors.title && (
+                    <ErrorMessage>{errors.title.message}</ErrorMessage>
+                )}
                 <Controller
                     name='description'
                     control={control}
@@ -60,6 +56,9 @@ const NewIssuePage = () => {
                         ></SimpleMDE>
                     )}
                 />
+                {errors.description && (
+                    <ErrorMessage>{errors.description.message}</ErrorMessage>
+                )}
                 <Button>Submit New Issue</Button>
             </form>
         </div>
