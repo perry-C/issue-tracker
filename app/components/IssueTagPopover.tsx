@@ -1,20 +1,8 @@
-import {
-    Avatar,
-    Box,
-    Button,
-    Checkbox,
-    Flex,
-    Popover,
-    TextArea,
-} from '@radix-ui/themes';
-import React, { PropsWithChildren } from 'react';
+import { Button, Popover } from '@radix-ui/themes';
 
-import { ChatBubbleIcon } from '@radix-ui/react-icons';
-import classnames from 'classnames';
+import { PropsWithChildren } from 'react';
 
 const IssueTagPopover = ({ children }: PropsWithChildren) => {
-    console.log(children);
-
     return (
         <div className='p-4'>
             <Popover.Root>
