@@ -16,3 +16,18 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newIssue, { status: 201 });
 }
+
+export async function GET() {
+    const body = await prisma.issue.findMany();
+
+    body.forEach((obj) => {
+        const validation = createIssueSchema.safeParse(obj);
+
+        if (!validation.success) {
+            return NextResponse.json(validation.error.errors, { status: 422 });
+        }
+    });
+
+    //TODO: parse the body.
+    return NextResponse.json(body, { status: 200 });
+}
