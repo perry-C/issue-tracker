@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import IssueTagPopover from '@/components/IssueTagPopover';
+import IssueTagPopover from './IssueTagPopover';
 import { TriangleDownIcon } from '@radix-ui/react-icons';
 
 const IssueTag = ({ children }: PropsWithChildren) => {

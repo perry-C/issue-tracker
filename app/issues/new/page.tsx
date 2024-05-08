@@ -5,9 +5,9 @@ import 'easymde/dist/easymde.min.css';
 import { Button, TextField } from '@radix-ui/themes';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import ErrorMessage from '@/app/components/ErrorMessage';
+import ErrorMessage from '@/components/ErrorMessage';
 import SimpleMDE from 'react-simplemde-editor';
-import Spinner from '@/app/components/Spinner';
+import Spinner from '@/components/Spinner';
 import axios from 'axios';
 import { createIssueSchema } from '@/app/validationSchemas';
 import { useRouter } from 'next/navigation';

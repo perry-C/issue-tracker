@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
-import IssueActionBar from '../components/IssueActionBar';
-import IssueTag from '../components/IssueTag';
-import IssueThumbnail from '../components/IssueThumbnail';
+import { Issue } from '@prisma/client';
+import IssueActionBar from '../../components/IssueActionBar';
+import IssueTag from '../../components/IssueTag';
+import IssueThumbnail from '../../components/IssueThumbnail';
 import axios from 'axios';
-import { issue } from '@prisma/client';
 
 const issueToolbarTags = ['Author', 'Label', 'Assignee', 'Sort'];
 
@@ -20,8 +20,8 @@ const IssuesPage = () => {
         });
     }, []);
 
-    const issueThumbnails = issues.map((val: issue, key: number) => (
-        <IssueThumbnail {...val} openedAt='5 hours ago' openedBy='perry-c' />
+    const issueThumbnails = issues.map((val: Issue, key: number) => (
+        <IssueThumbnail {...val} />
     ));
 
     const IssueTags = issueToolbarTags.map((val) => <IssueTag>{val}</IssueTag>);

@@ -1,7 +1,6 @@
 import { Button, Popover } from '@radix-ui/themes';
 
 import { PropsWithChildren } from 'react';
-import React from 'react';
 
 const IssueTagPopover = ({ children }: PropsWithChildren) => {
     return (

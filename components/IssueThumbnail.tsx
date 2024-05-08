@@ -6,8 +6,8 @@ import React from 'react';
 interface ThumbnailMetadata {
     id: number;
     title: string;
-    openedAt: string;
-    openedBy: string;
+    createdAt: Date;
+    createdBy: string;
     assignedTo?: string;
 }
 
@@ -18,7 +18,6 @@ const IssueThumbnail = (props: ThumbnailMetadata) => {
             className='border-b flex p-2 space-x-2 hover:bg-zinc-100'
         >
             <Checkbox size='3' />
-
             <div id='issue-status-icon'>
                 <RadiobuttonIcon className='size-4 text-iris' />
             </div>
@@ -27,7 +26,7 @@ const IssueThumbnail = (props: ThumbnailMetadata) => {
                     <b>{props.title}</b>
                 </div>
                 <div id='issue-meta-info' className='text-zinc-600'>
-                    {`opened at ${props.openedAt} by ${props.openedBy}`}
+                    {`#${props.id} opened at ${props.createdAt} by ${props.createdBy}`}
                 </div>
             </Link>
         </li>
