@@ -21,7 +21,7 @@ const IssueThumbnail = (props: ThumbnailMetadata) => {
             <div id='issue-status-icon'>
                 <RadiobuttonIcon className='size-4 text-iris' />
             </div>
-            <Link href='/issues'>
+            <Link href={`/issues/${props.id}`}>
                 <div id='issue-title' className='hover:text-iris'>
                     <b>{props.title}</b>
                 </div>
