@@ -39,7 +39,6 @@ const IssuesPage = () => {
                 >
                     {IssueTags}
                 </ul>
-
                 <ul className='flex-col'>{issueThumbnails}</ul>
             </div>
         </div>
