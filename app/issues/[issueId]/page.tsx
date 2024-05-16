@@ -66,7 +66,7 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
                 </div>
             </div>
             <div id='issue-sidebar' className='col-span-1 m-2'>
-                <IssueSidebar></IssueSidebar>
+                <IssueSidebar issueId={issueInfo?.id}></IssueSidebar>
             </div>
         </div>
     );

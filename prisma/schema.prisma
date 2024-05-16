@@ -20,7 +20,17 @@ model Issue {
   status      Status   @default(OPEN)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  createdBy   String   @db.VarChar(10) @default("")
+  createdBy   String   @default("") @db.VarChar(10)
+}
+
+model IssueComment {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String   @default("") @db.VarChar(10)
+
 }
 
 enum Status {
