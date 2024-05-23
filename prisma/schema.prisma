@@ -14,23 +14,24 @@ datasource db {
 }
 
 model Issue {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  description String   @db.Text
-  status      Status   @default(OPEN)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  createdBy   String   @default("") @db.VarChar(10)
+  id          Int            @id @default(autoincrement())
+  title       String         @db.VarChar(255)
+  description String         @db.Text
+  status      Status         @default(OPEN)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  createdBy   String         @default("") @db.VarChar(10)
+  comments    IssueComment[]
 }
 
 model IssueComment {
   id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
+  issue       Issue    @relation(fields: [issueId], references: [id])
+  issueId     Int      
   description String   @db.Text
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime @updatedAt @default(now())
   createdBy   String   @default("") @db.VarChar(10)
-
 }
 
 enum Status {

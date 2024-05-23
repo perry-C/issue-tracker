@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import React from 'react';
 
-const IssueActionBar = () => {
+const IssueActions = () => {
     return (
         <div
             id='issue-action-bar'
@@ -37,4 +37,4 @@ const IssueActionBar = () => {
     );
 };
 
-export default IssueActionBar;
+export default IssueActions;

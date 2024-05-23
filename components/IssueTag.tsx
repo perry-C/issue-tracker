@@ -1,15 +1,15 @@
 import React, { PropsWithChildren } from 'react';
 
-import IssueTagPopover from './IssueTagPopover';
+import IssueTagAction from './IssueTagActions';
 import { TriangleDownIcon } from '@radix-ui/react-icons';
 
 const IssueTag = ({ children }: PropsWithChildren) => {
     return (
         <li id='issue-toolbar'>
-            <IssueTagPopover>
+            <IssueTagAction>
                 {children}
                 <TriangleDownIcon />
-            </IssueTagPopover>
+            </IssueTagAction>
         </li>
     );
 };

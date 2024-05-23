@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { Issue } from '@prisma/client';
-import IssueActionBar from '../../components/IssueActionBar';
+import IssueActions from '../../components/IssueActions';
 import IssueTag from '../../components/IssueTag';
 import IssueThumbnail from '../../components/IssueThumbnail';
 import axios from 'axios';
@@ -28,7 +28,7 @@ const IssuesPage = () => {
 
     return (
         <div id='issue-page'>
-            <IssueActionBar></IssueActionBar>
+            <IssueActions></IssueActions>
             <div
                 id='issue-display-form'
                 className='flex flex-col border-solid border-2'

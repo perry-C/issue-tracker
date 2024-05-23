@@ -2,7 +2,7 @@ import { Button, Popover } from '@radix-ui/themes';
 
 import { PropsWithChildren } from 'react';
 
-const IssueTagPopover = ({ children }: PropsWithChildren) => {
+const IssueTagActions = ({ children }: PropsWithChildren) => {
     return (
         <div className='p-4'>
             <Popover.Root>
@@ -17,4 +17,4 @@ const IssueTagPopover = ({ children }: PropsWithChildren) => {
     );
 };
 
-export default IssueTagPopover;
+export default IssueTagActions;
