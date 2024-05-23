@@ -2,43 +2,71 @@
 
 import 'easymde/dist/easymde.min.css';
 
-import { Box, Button, Card, Heading, Inset, Separator } from '@radix-ui/themes';
-import React, { useEffect, useState } from 'react';
+import { Button, Separator } from '@radix-ui/themes';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { IssueComment, Prisma } from '@prisma/client';
+import { useEffect, useState } from 'react';
 
-import { Controller } from 'react-hook-form';
-import DiscussionThread from '@/components/DiscussionThread';
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { Issue } from '@prisma/client';
+import ErrorMessage from '@/components/ErrorMessage';
 import IssueHeader from '@/components/IssueHeader';
-import IssueOpen from '@/components/IssueOpen';
 import IssueSidebar from '@/components/IssueSidebar';
-import Link from 'next/link';
 import SimpleMDE from 'react-simplemde-editor';
+import Spinner from '@/components/Spinner';
+import TimelineComment from '@/components/TimelineComment';
 import axios from 'axios';
-import classnames from 'classnames';
+import { createIssueCommentSchema } from '@/app/validationSchemas';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-const temp = [1, 2];
-
+type IssueCommentInput = z.infer<typeof createIssueCommentSchema>;
+type IssueWithComments = Prisma.IssueGetPayload<{
+    include: { comments: true };
+}>;
 const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
-    const [issueInfo, setIssueInfo] = useState<Issue>();
+    const {
+        register,
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IssueCommentInput>({
+        resolver: zodResolver(createIssueCommentSchema),
+    });
 
-    useEffect(() => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [issueInfo, setIssueInfo] = useState<IssueWithComments>();
+
+    const fetchIssueComments = () =>
         axios.get(`/api/issues/${params.issueId}`).then((resolve) => {
             const response = JSON.parse(resolve.request.response);
             setIssueInfo(response);
         });
+
+    useEffect(() => {
+        fetchIssueComments();
     }, []);
+
+    const onSubmit: SubmitHandler<IssueCommentInput> = async (data) => {
+        try {
+            setIsSubmitting(true);
+            await axios.post(`/api/issues/${params.issueId}`, data);
+            fetchIssueComments();
+            setIsSubmitting(false);
+        } catch (error) {
+            setIsSubmitting(false);
+            console.log(error);
+        }
+    };
 
     return (
         <div
-            id='issue-description-wrapper'
+            id='issue-description-container'
             className='grid grid-cols-4 space-y-3'
         >
             <IssueHeader issueInfo={issueInfo}></IssueHeader>
-            <div id='issue-discussion' className='col-span-3'>
-                {temp.map(() => (
+            <div id='issue-timeline' className='col-span-3'>
+                {issueInfo?.comments.map((item: IssueComment) => (
                     <>
-                        <DiscussionThread></DiscussionThread>
+                        <TimelineComment {...item}></TimelineComment>
                         <Separator
                             className='ml-2'
                             orientation='vertical'
@@ -47,22 +75,34 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
                     </>
                 ))}
                 <Separator size='4' className='mb-3'></Separator>
-                <div id='issue-discussion-new'>
-                    <form>
-                        <SimpleMDE placeholder='Add your comment here...'></SimpleMDE>
+                <div id='issue-comment-new'>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Controller
+                            name='description'
+                            control={control}
+                            render={({ field }) => (
+                                <SimpleMDE
+                                    placeholder='Add your comment here...'
+                                    {...field}
+                                ></SimpleMDE>
+                            )}
+                        ></Controller>
+                        {errors.description && (
+                            <ErrorMessage>
+                                {errors.description.message}
+                            </ErrorMessage>
+                        )}
+                        <div
+                            id='issue-actions-container'
+                            className='flex justify-end space-x-1 mt-1'
+                        >
+                            <Button variant='outline'>Close issue</Button>
+                            <Button disabled={isSubmitting}>
+                                {isSubmitting && <Spinner></Spinner>}
+                                Comment
+                            </Button>
+                        </div>
                     </form>
-
-                    <div
-                        id='issue-discussion-new-action-group'
-                        className='flex justify-end space-x-1 mt-1'
-                    >
-                        <Button variant='outline'>Close issue</Button>
-                        {/* <Button disabled={isSubmitting}> */}
-                        <Button>
-                            Comment
-                            {/* {isSubmitting && <Spinner></Spinner>} */}
-                        </Button>
-                    </div>
                 </div>
             </div>
             <div id='issue-sidebar' className='col-span-1 m-2'>

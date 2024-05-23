@@ -1,6 +1,10 @@
+import { Issue, Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import {
+    createIssueCommentSchema,
+    createIssueSchema,
+} from '@/app/validationSchemas';
 
-import { createIssueSchema } from '@/app/validationSchemas';
 import prisma from '@/prisma/client';
 
 export async function GET(
@@ -9,6 +13,9 @@ export async function GET(
 ) {
     const issueRequested = await prisma.issue.findUnique({
         where: { id: Number(params.issueId) },
+        include: {
+            comments: true,
+        },
     });
     const validation = createIssueSchema.safeParse(issueRequested);
 
@@ -16,6 +23,43 @@ export async function GET(
         return NextResponse.json(validation.error.errors, { status: 422 });
     }
     return NextResponse.json(issueRequested, { status: 200 });
+}
+
+// Add the newly created comment to the server
+
+export async function POST(
+    request: NextRequest,
+    { params }: { params: { issueId: number } }
+) {
+    const comment = await request.json();
+
+    const validation = createIssueCommentSchema.safeParse(comment);
+    if (!validation.success) {
+        return NextResponse.json(validation.error.errors, { status: 400 });
+    }
+
+    // Creation of the new comment onto the server
+    const newComment = await prisma.issueComment.create({
+        data: {
+            description: comment.description,
+            issueId: Number(params.issueId),
+        },
+    });
+
+    // Linking it to its related issue
+    const updateIssue = await prisma.issue.update({
+        where: {
+            id: Number(params.issueId),
+        },
+        data: {
+            comments: {
+                connect: {
+                    id: newComment.id,
+                },
+            },
+        },
+    });
+    return NextResponse.json(updateIssue, { status: 201 });
 }
 
 export async function DELETE(

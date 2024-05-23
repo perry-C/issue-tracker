@@ -13,3 +13,12 @@ export const createIssueSchema = z.object({
         })
         .min(1, 'Description is required'),
 });
+
+export const createIssueCommentSchema = z.object({
+    description: z
+        .string({
+            required_error: 'The comment can not be empty',
+            invalid_type_error: 'Description must be a string',
+        })
+        .min(1, 'The comment can not be empty'),
+});
