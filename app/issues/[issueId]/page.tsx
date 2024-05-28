@@ -4,7 +4,7 @@ import 'easymde/dist/easymde.min.css';
 
 import { Button, Separator } from '@radix-ui/themes';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { IssueComment, Prisma } from '@prisma/client';
+import { Issue, IssueComment } from '@prisma/client';
 import { useEffect, useState } from 'react';
 
 import ErrorMessage from '@/components/ErrorMessage';
@@ -19,9 +19,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type IssueCommentInput = z.infer<typeof createIssueCommentSchema>;
-type IssueWithComments = Prisma.IssueGetPayload<{
-    include: { comments: true };
-}>;
+
 const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
     const {
         register,
@@ -33,23 +31,26 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [issueInfo, setIssueInfo] = useState<IssueWithComments>();
+    const [issue, setIssue] = useState<Issue>();
+    const [comments, setComments] = useState<IssueComment[]>([]);
 
-    const fetchIssueComments = () =>
+    const fetchIssues = () =>
         axios.get(`/api/issues/${params.issueId}`).then((resolve) => {
             const response = JSON.parse(resolve.request.response);
-            setIssueInfo(response);
+            const { comments, ...issueOject } = response;
+            setComments(comments);
+            setIssue(issueOject);
         });
 
     useEffect(() => {
-        fetchIssueComments();
+        fetchIssues();
     }, []);
 
     const onSubmit: SubmitHandler<IssueCommentInput> = async (data) => {
         try {
             setIsSubmitting(true);
             await axios.post(`/api/issues/${params.issueId}`, data);
-            fetchIssueComments();
+            fetchIssues();
             setIsSubmitting(false);
         } catch (error) {
             setIsSubmitting(false);
@@ -62,11 +63,15 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
             id='issue-description-container'
             className='grid grid-cols-4 space-y-3'
         >
-            <IssueHeader issueInfo={issueInfo}></IssueHeader>
+            <IssueHeader issueInfo={issue}></IssueHeader>
             <div id='issue-timeline' className='col-span-3'>
-                {issueInfo?.comments.map((item: IssueComment) => (
+                {comments?.map((item: IssueComment) => (
                     <>
-                        <TimelineComment {...item}></TimelineComment>
+                        <TimelineComment
+                            comments={comments}
+                            setComments={setComments}
+                            {...item}
+                        ></TimelineComment>
                         <Separator
                             className='ml-2'
                             orientation='vertical'
@@ -106,7 +111,7 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
                 </div>
             </div>
             <div id='issue-sidebar' className='col-span-1 m-2'>
-                <IssueSidebar issueId={issueInfo?.id}></IssueSidebar>
+                <IssueSidebar issueId={issue?.id}></IssueSidebar>
             </div>
         </div>
     );
