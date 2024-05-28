@@ -65,19 +65,19 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
         >
             <IssueHeader issueInfo={issue}></IssueHeader>
             <div id='issue-timeline' className='col-span-3'>
-                {comments?.map((item: IssueComment) => (
-                    <>
+                {comments?.map((comment: IssueComment) => (
+                    <div key={comment.id}>
                         <TimelineComment
                             comments={comments}
                             setComments={setComments}
-                            {...item}
+                            {...comment}
                         ></TimelineComment>
                         <Separator
                             className='ml-2'
                             orientation='vertical'
                             size='2'
                         ></Separator>
-                    </>
+                    </div>
                 ))}
                 <Separator size='4' className='mb-3'></Separator>
                 <div id='issue-comment-new'>

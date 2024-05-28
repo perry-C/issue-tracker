@@ -11,13 +11,18 @@ import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-const sidebarItems = ['Assignees', 'Labels', 'Projects', 'Milestones'];
+const sidebarItems = [
+    { id: 0, name: 'Assignees' },
+    { id: 1, name: 'Labels' },
+    { id: 2, name: 'Projects' },
+    { id: 3, name: 'Milestones' },
+];
 
-const sidebarActionButtons = [
-    { name: 'Lock conversation', icon: LockClosedIcon },
-    { name: 'Pin issue', icon: DrawingPinIcon },
-    { name: 'Transfer issue', icon: ArrowRightIcon },
-    { name: 'Delete issue', icon: TrashIcon },
+const sidebarActions = [
+    { id: 0, name: 'Lock conversation', icon: LockClosedIcon },
+    { id: 1, name: 'Pin issue', icon: DrawingPinIcon },
+    { id: 2, name: 'Transfer issue', icon: ArrowRightIcon },
+    { id: 3, name: 'Delete issue', icon: TrashIcon },
 ];
 
 const SidebarItem = ({ item }: { item: string }) => (
@@ -50,8 +55,7 @@ const IssueSidebar = (props: Props) => {
             await axios.delete(`/api/issues/${props.issueId}`);
             router.push('/issues');
         } catch (error) {
-            console.log(error);
-            alert('Issue can not be deleted');
+            console.error(error);
         }
     };
 
@@ -62,18 +66,18 @@ const IssueSidebar = (props: Props) => {
         >
             <div id='sidebar-items'></div>
             {sidebarItems.map((item) => (
-                <SidebarItem item={item} />
+                <SidebarItem key={item.id} item={item.name} />
             ))}
             <Separator size='4' className='mt-2'></Separator>
             <ul>
-                {sidebarActionButtons.map((item) => (
-                    <li>
+                {sidebarActions.map((action) => (
+                    <li key={action.id}>
                         <button
                             onClick={OnDeleteIssue}
                             className='flex justify-start items-center hover:text-iris'
                         >
-                            {item.name}
-                            <item.icon className='ml-1' />
+                            {action.name}
+                            <action.icon className='ml-1' />
                         </button>
                     </li>
                 ))}

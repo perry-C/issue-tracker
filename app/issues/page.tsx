@@ -8,7 +8,12 @@ import IssueTag from '../../components/IssueTag';
 import IssueThumbnail from '../../components/IssueThumbnail';
 import axios from 'axios';
 
-const issueToolbarTags = ['Author', 'Label', 'Assignee', 'Sort'];
+const issueToolbarTags = [
+    { id: 0, name: 'Author' },
+    { id: 1, name: 'Label' },
+    { id: 2, name: 'Assignee' },
+    { id: 3, name: 'Sort' },
+];
 
 const IssuesPage = () => {
     const [issues, setIssues] = useState([]);
@@ -21,10 +26,12 @@ const IssuesPage = () => {
     }, []);
 
     const issueThumbnails = issues.map((val: Issue, key: number) => (
-        <IssueThumbnail {...val} />
+        <IssueThumbnail key={val.id} {...val} />
     ));
 
-    const IssueTags = issueToolbarTags.map((val) => <IssueTag>{val}</IssueTag>);
+    const IssueTags = issueToolbarTags.map((tag) => (
+        <IssueTag key={tag.name}>{tag.name}</IssueTag>
+    ));
 
     return (
         <div id='issue-page'>

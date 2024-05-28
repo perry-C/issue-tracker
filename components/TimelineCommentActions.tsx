@@ -22,16 +22,19 @@ const TimelineCommentActions = (props: TimelineCommentMetaData) => {
     const hideAction = () => console.log('hideAction');
     const editAction = () => console.log('editAction');
 
-    const timelineCommentActionButtons = [
+    const timelineCommentActions = [
         {
+            id: 0,
             name: 'Edit',
             action: editAction,
         },
         {
+            id: 1,
             name: 'Hide',
             action: hideAction,
         },
         {
+            id: 2,
             name: 'Delete',
             action: deleteAction,
         },
@@ -47,12 +50,13 @@ const TimelineCommentActions = (props: TimelineCommentMetaData) => {
                         </button>
                     </Popover.Trigger>
                     <Popover.Content>
-                        {timelineCommentActionButtons.map((item) => (
+                        {timelineCommentActions.map((action) => (
                             <button
-                                onClick={item.action}
+                                key={action.id}
+                                onClick={action.action}
                                 className='flex flex-col hover:text-iris'
                             >
-                                {item.name}
+                                {action.name}
                             </button>
                         ))}
                     </Popover.Content>
