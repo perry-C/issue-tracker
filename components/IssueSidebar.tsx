@@ -50,7 +50,8 @@ const IssueSidebar = (props: Props) => {
             await axios.delete(`/api/issues/${props.issueId}`);
             router.push('/issues');
         } catch (error) {
-            alert('Issue requested to delete does not exist');
+            console.log(error);
+            alert('Issue can not be deleted');
         }
     };
 
