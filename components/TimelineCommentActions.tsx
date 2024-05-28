@@ -7,8 +7,8 @@ import axios from 'axios';
 interface TimelineCommentMetaData {
     issueId: number;
     commentId: number;
-    comments: IssueComment[];
-    setComments: any;
+    comments?: IssueComment[];
+    setComments?: any;
 }
 
 const TimelineCommentActions = (props: TimelineCommentMetaData) => {
@@ -16,7 +16,7 @@ const TimelineCommentActions = (props: TimelineCommentMetaData) => {
         // TODO: call api request to server in order to delete comment
         await axios.delete(`/api/issues/${props.issueId}/${props.commentId}`);
         props.setComments(
-            props.comments.filter((comment) => comment.id !== props.commentId)
+            props.comments?.filter((comment) => comment.id !== props.commentId)
         );
     };
     const hideAction = () => console.log('hideAction');
@@ -39,7 +39,7 @@ const TimelineCommentActions = (props: TimelineCommentMetaData) => {
 
     return (
         <div id='timeline-comment-actions'>
-            <button className='hover:text-iris'>
+            <div className='hover:text-iris'>
                 <Popover.Root>
                     <Popover.Trigger>
                         <button>
@@ -57,7 +57,7 @@ const TimelineCommentActions = (props: TimelineCommentMetaData) => {
                         ))}
                     </Popover.Content>
                 </Popover.Root>
-            </button>
+            </div>
         </div>
     );
 };

@@ -4,8 +4,8 @@ import { IssueComment } from '@prisma/client';
 import TimelineCommentActions from './TimelineCommentActions';
 
 interface TimelineCommentMetaData extends IssueComment {
-    comments: IssueComment[];
-    setComments: any;
+    comments?: IssueComment[];
+    setComments?: any;
 }
 
 const TimelineComment = (props: TimelineCommentMetaData) => (
