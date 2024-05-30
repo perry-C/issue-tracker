@@ -40,7 +40,7 @@ const SidebarItem = ({ item }: { item: string }) => (
             <Popover.Content>Content</Popover.Content>
         </Popover.Root>
         <div>None yet</div>
-        <Separator size='4' className='mt-2'></Separator>
+        <Separator size='4' className='mt-2' />
     </div>
 );
 
@@ -68,7 +68,7 @@ const IssueSidebar = (props: Props) => {
             {sidebarItems.map((item) => (
                 <SidebarItem key={item.id} item={item.name} />
             ))}
-            <Separator size='4' className='mt-2'></Separator>
+            <Separator size='4' className='mt-2' />
             <ul>
                 {sidebarActions.map((action) => (
                     <li key={action.id}>

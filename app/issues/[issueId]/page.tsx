@@ -76,10 +76,10 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
                             className='ml-2'
                             orientation='vertical'
                             size='2'
-                        ></Separator>
+                        />
                     </div>
                 ))}
-                <Separator size='4' className='mb-3'></Separator>
+                <Separator size='4' className='mb-3' />
                 <div id='issue-comment-new'>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Controller

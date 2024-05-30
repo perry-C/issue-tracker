@@ -5,12 +5,12 @@ import { TriangleDownIcon } from '@radix-ui/react-icons';
 
 const IssueTag = ({ children }: PropsWithChildren) => {
     return (
-        <li id='issue-toolbar'>
+        <div id='issue-toolbar'>
             <IssueTagAction>
                 {children}
                 <TriangleDownIcon />
             </IssueTagAction>
-        </li>
+        </div>
     );
 };
 

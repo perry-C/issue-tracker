@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 
 import { Issue } from '@prisma/client';
-import IssueActions from '../../components/IssueActions';
 import IssueTag from '../../components/IssueTag';
 import IssueThumbnail from '../../components/IssueThumbnail';
+import IssueTopBar from '../../components/IssueTopBar';
+import { Separator } from '@radix-ui/themes';
 import axios from 'axios';
 
 const issueToolbarTags = [
@@ -26,26 +27,27 @@ const IssuesPage = () => {
     }, []);
 
     const issueThumbnails = issues.map((val: Issue, key: number) => (
-        <IssueThumbnail key={val.id} {...val} />
+        <li>
+            <IssueThumbnail key={val.id} {...val} />
+            <Separator size='4' />
+        </li>
     ));
 
     const IssueTags = issueToolbarTags.map((tag) => (
-        <IssueTag key={tag.name}>{tag.name}</IssueTag>
+        <li className='flex items-center'>
+            <IssueTag key={tag.name}>{tag.name}</IssueTag>
+            <Separator size='2' orientation='vertical' />
+        </li>
     ));
 
     return (
         <div id='issue-page'>
-            <IssueActions></IssueActions>
-            <div
-                id='issue-display-form'
-                className='flex flex-col border-solid border-2'
-            >
-                <ul
-                    id='issue-toolbar'
-                    className='flex justify-end border-b bg-zinc-100'
-                >
+            <IssueTopBar></IssueTopBar>
+            <div id='issue-display-form' className='flex flex-col'>
+                <ul id='issue-toolbar' className='flex justify-end g-zinc-100'>
                     {IssueTags}
                 </ul>
+                <Separator size='4' />
                 <ul className='flex-col'>{issueThumbnails}</ul>
             </div>
         </div>

@@ -5,11 +5,11 @@ import IssueOpen from './IssueOpen';
 import Link from 'next/link';
 import React from 'react';
 
-interface Props {
+interface IssueHeaderProps {
     issueInfo?: Issue;
 }
 
-const IssueHeader = ({ issueInfo }: Props) => {
+const IssueHeader = ({ issueInfo }: IssueHeaderProps) => {
     return (
         <div id='issue-header' className='space-y-3 col-span-4'>
             <div
@@ -36,7 +36,7 @@ const IssueHeader = ({ issueInfo }: Props) => {
                     {String(issueInfo?.createdAt)}
                 </div>
             </div>
-            <Separator size='4'></Separator>
+            <Separator size='4' />
         </div>
     );
 };

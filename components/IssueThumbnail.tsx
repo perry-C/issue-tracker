@@ -13,9 +13,9 @@ interface ThumbnailMetadata {
 
 const IssueThumbnail = (props: ThumbnailMetadata) => {
     return (
-        <li
+        <div
             id={`issue-title_${props.id}`}
-            className='border-b flex p-2 space-x-2 hover:bg-zinc-100'
+            className='flex p-2 space-x-2 hover:bg-zinc-100 transition-colors'
         >
             <Checkbox size='3' />
             <div id='issue-status-icon'>
@@ -29,7 +29,7 @@ const IssueThumbnail = (props: ThumbnailMetadata) => {
                     {`#${props.id} opened at ${props.createdAt} by ${props.createdBy}`}
                 </div>
             </Link>
-        </li>
+        </div>
     );
 };
 
