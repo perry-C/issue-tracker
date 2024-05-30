@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { RadiobuttonIcon } from '@radix-ui/react-icons';
 import React from 'react';
 
-interface ThumbnailMetadata {
+interface IssueTableRowProps {
     id: number;
     title: string;
     createdAt: Date;
@@ -11,7 +11,7 @@ interface ThumbnailMetadata {
     assignedTo?: string;
 }
 
-const IssueThumbnail = (props: ThumbnailMetadata) => {
+const IssueTableRow = (props: IssueTableRowProps) => {
     return (
         <div
             id={`issue-title_${props.id}`}
@@ -33,4 +33,4 @@ const IssueThumbnail = (props: ThumbnailMetadata) => {
     );
 };
 
-export default IssueThumbnail;
+export default IssueTableRow;
