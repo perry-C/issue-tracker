@@ -12,11 +12,13 @@ import axios from 'axios';
 
 const IssuesPage = () => {
     const [issues, setIssues] = useState([]);
+    const [selectedList, setSelectedList] = useState<boolean[]>([]);
 
     useEffect(() => {
         axios.get('/api/issues').then((resolve) => {
             const response = JSON.parse(resolve.request.response);
             setIssues(response);
+            setSelectedList(Array(response.length).fill(false));
         });
     }, []);
 
@@ -26,7 +28,11 @@ const IssuesPage = () => {
                 <IssueTopBar></IssueTopBar>
             </div>
             <div id='issue-table'>
-                <IssueTable issues={issues}></IssueTable>
+                <IssueTable
+                    issues={issues}
+                    selectedList={selectedList}
+                    setSelectedList={setSelectedList}
+                ></IssueTable>
             </div>
         </div>
     );

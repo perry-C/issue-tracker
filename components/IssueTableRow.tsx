@@ -1,14 +1,16 @@
 import { Checkbox } from '@radix-ui/themes';
 import Link from 'next/link';
 import { RadiobuttonIcon } from '@radix-ui/react-icons';
-import React from 'react';
 
 interface IssueTableRowProps {
+    rowId: number;
     id: number;
     title: string;
     createdAt: Date;
     createdBy: string;
     assignedTo?: string;
+    handleSelect: any;
+    selected: boolean;
 }
 
 const IssueTableRow = (props: IssueTableRowProps) => {
@@ -17,7 +19,13 @@ const IssueTableRow = (props: IssueTableRowProps) => {
             id={`issue-title_${props.id}`}
             className='flex p-2 space-x-2 hover:bg-zinc-100 transition-colors'
         >
-            <Checkbox size='3' />
+            <Checkbox
+                size='3'
+                variant='classic'
+                onClick={() => props.handleSelect(props.rowId)}
+                checked={props.selected}
+            />
+
             <div id='issue-status-icon'>
                 <RadiobuttonIcon className='size-4 text-iris' />
             </div>

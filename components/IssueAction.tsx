@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 
 import { TriangleDownIcon } from '@radix-ui/react-icons';
 
-const IssueAction = ({ children }: PropsWithChildren) => {
+const IssueFilterButton = ({ children }: PropsWithChildren) => {
     return (
         <div id='issue-toolbar'>
             <div className='p-4'>
@@ -22,4 +22,4 @@ const IssueAction = ({ children }: PropsWithChildren) => {
     );
 };
 
-export default IssueAction;
+export default IssueFilterButton;

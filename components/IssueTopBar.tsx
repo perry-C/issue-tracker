@@ -21,6 +21,7 @@ const IssueTopBar = () => {
             className='w-2/3'
             size='2'
             placeholder='Search the docs…'
+            variant='classic'
         >
             <TextField.Slot>
                 <Popover.Root>
@@ -37,7 +38,7 @@ const IssueTopBar = () => {
         </TextField.Root>
     );
     const labelsAndMilestones = (
-        <Card>
+        <Card variant='classic'>
             <Inset
                 className='flex justify-center items-center w-48'
                 clip='padding-box'
@@ -63,7 +64,7 @@ const IssueTopBar = () => {
         </Card>
     );
     const newIssue = (
-        <Button>
+        <Button variant='classic'>
             <Link href='/issues/new'>
                 <Strong>New Issue</Strong>
             </Link>
