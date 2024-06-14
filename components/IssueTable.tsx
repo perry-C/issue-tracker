@@ -1,4 +1,9 @@
-import { Card, Checkbox, Inset, Separator } from '@radix-ui/themes';
+import { Card, Checkbox, Inset, Separator, Strong } from '@radix-ui/themes';
+import {
+    CheckIcon,
+    RadiobuttonIcon,
+    ThickArrowUpIcon,
+} from '@radix-ui/react-icons';
 
 import { Issue } from '@prisma/client';
 import IssueFilterButton from './IssueAction';
@@ -58,22 +63,46 @@ const IssueTable = ({ issues, selectedList, setSelectedList }: Props) => {
                     id='issue-menu-bar'
                     className='flex justify-end items-center bg-zinc-100'
                 >
-                    <div id='issue-full-select' className='mr-auto ml-2'>
+                    <div className='flex mr-auto ml-2 space-x-2 items-center'>
                         <Checkbox
+                            id='issue-full-select'
                             variant='classic'
                             size='3'
                             className='mr-auto'
                             onClick={handleFullSelect}
                         />
+                        <button
+                            id='issue-opened'
+                            className='flex items-center space-x-2'
+                        >
+                            <RadiobuttonIcon className='size-4 ' />
+                            <div>
+                                <Strong>
+                                    {
+                                        selectedList.filter(
+                                            (item) => item === true
+                                        ).length
+                                    }{' '}
+                                    Opened
+                                </Strong>
+                            </div>
+                        </button>
+                        <button
+                            id='issue-closed'
+                            className='flex items-center space-x-2 text-zinc-500 hover:text-black transition-colors'
+                        >
+                            <CheckIcon className='size-4' />
+                            <div>
+                                {
+                                    selectedList.filter(
+                                        (item) => item === false
+                                    ).length
+                                }{' '}
+                                Closed
+                            </div>
+                        </button>
                     </div>
-                    <button id='issue-opened'>
-                        {selectedList.filter((item) => item === true).length}{' '}
-                        opened
-                    </button>
-                    <button id='issue-closed'>
-                        {selectedList.filter((item) => item === false).length}{' '}
-                        closed
-                    </button>
+
                     {issueFilterButtons}
                 </ul>
 
