@@ -32,14 +32,17 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [issue, setIssue] = useState<Issue>();
+    const [issueTitle, setIssueTitle] = useState('');
+
     const [comments, setComments] = useState<IssueComment[]>([]);
 
     const fetchIssues = () =>
         axios.get(`/api/issues/${params.issueId}`).then((resolve) => {
             const response = JSON.parse(resolve.request.response);
-            const { comments, ...issueOject } = response;
+            const { comments, ...issueObject } = response;
             setComments(comments);
-            setIssue(issueOject);
+            setIssue(issueObject);
+            setIssueTitle(issueObject.title);
         });
 
     useEffect(() => {
@@ -63,7 +66,11 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
             id='issue-description-container'
             className='grid grid-cols-4 space-y-3'
         >
-            <IssueHeader issueInfo={issue}></IssueHeader>
+            <IssueHeader
+                issueInfo={issue}
+                issueTitle={issueTitle}
+                setIssueTitle={setIssueTitle}
+            ></IssueHeader>
             <div id='issue-timeline' className='col-span-3'>
                 {comments?.map((comment: IssueComment) => (
                     <div key={comment.id}>

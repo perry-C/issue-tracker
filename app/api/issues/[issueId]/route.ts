@@ -47,7 +47,7 @@ export async function POST(
     });
 
     // Linking it to its related issue
-    const updateIssue = await prisma.issue.update({
+    const updatedIssue = await prisma.issue.update({
         where: {
             id: Number(params.issueId),
         },
@@ -59,7 +59,7 @@ export async function POST(
             },
         },
     });
-    return NextResponse.json(updateIssue, { status: 201 });
+    return NextResponse.json(updatedIssue, { status: 201 });
 }
 
 export async function DELETE(
@@ -75,4 +75,18 @@ export async function DELETE(
         return NextResponse.error();
     }
     return NextResponse.json(deletePost, { status: 200 });
+}
+
+export async function PATCH(
+    request: NextRequest,
+    { params }: { params: { issueId: number } }
+) {
+    const { newIssueTitle } = await request.json();
+
+    const updatedIssue = await prisma.issue.update({
+        where: { id: Number(params.issueId) },
+        data: { title: newIssueTitle },
+    });
+
+    return NextResponse.json(updatedIssue, { status: 200 });
 }

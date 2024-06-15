@@ -1,9 +1,5 @@
 import { Card, Checkbox, Inset, Separator, Strong } from '@radix-ui/themes';
-import {
-    CheckIcon,
-    RadiobuttonIcon,
-    ThickArrowUpIcon,
-} from '@radix-ui/react-icons';
+import { CheckIcon, RadiobuttonIcon } from '@radix-ui/react-icons';
 
 import { Issue } from '@prisma/client';
 import IssueFilterButton from './IssueAction';
