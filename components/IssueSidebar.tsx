@@ -11,20 +11,6 @@ import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-const sidebarItems = [
-    { id: 0, name: 'Assignees' },
-    { id: 1, name: 'Labels' },
-    { id: 2, name: 'Projects' },
-    { id: 3, name: 'Milestones' },
-];
-
-const sidebarActions = [
-    { id: 0, name: 'Lock conversation', icon: LockClosedIcon },
-    { id: 1, name: 'Pin issue', icon: DrawingPinIcon },
-    { id: 2, name: 'Transfer issue', icon: ArrowRightIcon },
-    { id: 3, name: 'Delete issue', icon: TrashIcon },
-];
-
 const SidebarItem = ({ item }: { item: string }) => (
     <div>
         <Popover.Root>
@@ -50,7 +36,27 @@ interface Props {
 
 const IssueSidebar = (props: Props) => {
     const router = useRouter();
-    const OnDeleteIssue = async () => {
+
+    const sidebarItems = [
+        { id: 0, name: 'Assignees' },
+        { id: 1, name: 'Labels' },
+        { id: 2, name: 'Projects' },
+        { id: 3, name: 'Milestones' },
+    ];
+
+    const handleLockConversation = () => {
+        alert('not implemented');
+    };
+
+    const handlePinIssue = () => {
+        alert('not implemented');
+    };
+
+    const handleTransferIssue = () => {
+        alert('not implemented');
+    };
+
+    const handleDeleteIssue = async () => {
         try {
             await axios.delete(`/api/issues/${props.issueId}`);
             router.push('/issues');
@@ -58,6 +64,33 @@ const IssueSidebar = (props: Props) => {
             console.error(error);
         }
     };
+
+    const sidebarActions = [
+        {
+            id: 0,
+            name: 'Lock conversation',
+            icon: LockClosedIcon,
+            method: handleLockConversation,
+        },
+        {
+            id: 1,
+            name: 'Pin issue',
+            icon: DrawingPinIcon,
+            method: handlePinIssue,
+        },
+        {
+            id: 2,
+            name: 'Transfer issue',
+            icon: ArrowRightIcon,
+            method: handleTransferIssue,
+        },
+        {
+            id: 3,
+            name: 'Delete issue',
+            icon: TrashIcon,
+            method: handleDeleteIssue,
+        },
+    ];
 
     return (
         <div
@@ -73,7 +106,7 @@ const IssueSidebar = (props: Props) => {
                 {sidebarActions.map((action) => (
                     <li key={action.id}>
                         <button
-                            onClick={OnDeleteIssue}
+                            onClick={action.method}
                             className='flex justify-start items-center hover:text-iris'
                         >
                             {action.name}
