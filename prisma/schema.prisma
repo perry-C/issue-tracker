@@ -14,24 +14,42 @@ datasource db {
 }
 
 model Issue {
-  id          Int            @id @default(autoincrement())
-  title       String         @db.VarChar(255)
-  description String         @db.Text
-  status      Status         @default(OPEN)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  createdBy   String         @default("") @db.VarChar(10)
+  id          Int              @id @default(autoincrement())
+  title       String           @db.VarChar(255)
+  description String           @db.Text
+  status      Status           @default(OPEN)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  createdBy   String           @default("") @db.VarChar(10)
   comments    IssueComment[]
+  labels      LabelsOnIssues[]
 }
 
 model IssueComment {
   id          Int      @id @default(autoincrement())
   issue       Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  issueId     Int      
+  issueId     Int
   description String   @db.Text
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
   createdBy   String   @default("") @db.VarChar(10)
+}
+
+model LabelsOnIssues {
+  issue   Issue @relation(fields: [issueId], references: [id])
+  issueId Int // relation scalar field
+  label   Label @relation(fields: [labelId], references: [id])
+  labelId Int
+
+  @@id([issueId, labelId])
+}
+
+// Many-to-many relationship with the model Issue 
+// (issues can have many labels, and labels can be assigned to many issues) 
+model Label {
+  id     Int              @id @default(autoincrement())
+  name   String           @db.Text
+  issues LabelsOnIssues[]
 }
 
 enum Status {
