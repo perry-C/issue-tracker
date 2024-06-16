@@ -5,13 +5,13 @@ import {
     LockClosedIcon,
     TrashIcon,
 } from '@radix-ui/react-icons';
-import { Popover, Separator } from '@radix-ui/themes';
+import { Avatar, Popover, Separator, Strong } from '@radix-ui/themes';
 
 import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-const SidebarItem = ({ item }: { item: string }) => (
+const SidebarItem = ({ name }: { name: string }) => (
     <div>
         <Popover.Root>
             <Popover.Trigger>
@@ -19,7 +19,8 @@ const SidebarItem = ({ item }: { item: string }) => (
                     className='flex justify-between items-center 
                     w-full hover:text-iris'
                 >
-                    {item}
+                    <Strong>{name}</Strong>
+
                     <GearIcon />
                 </button>
             </Popover.Trigger>
@@ -95,26 +96,39 @@ const IssueSidebar = (props: Props) => {
     return (
         <div
             id='sidebar-container'
-            className='flex flex-col flex-grow-3 mx-2 my-2'
+            className='flex flex-col mx-2 my-2 space-y-2'
         >
-            <div id='sidebar-items'></div>
             {sidebarItems.map((item) => (
-                <SidebarItem key={item.id} item={item.name} />
+                <SidebarItem key={item.id} name={item.name} />
             ))}
+
+            <div>10 Participants</div>
+            <div
+                id='sidebar-participants-container'
+                className='flex flex-wrap content-between gap-1'
+            >
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+                <Avatar variant='solid' fallback='A' />
+            </div>
             <Separator size='4' className='mt-2' />
-            <ul>
-                {sidebarActions.map((action) => (
-                    <li key={action.id}>
-                        <button
-                            onClick={action.method}
-                            className='flex justify-start items-center hover:text-iris'
-                        >
-                            {action.name}
-                            <action.icon className='ml-1' />
-                        </button>
-                    </li>
-                ))}
-            </ul>
+            {sidebarActions.map((action) => (
+                <button
+                    key={action.id}
+                    onClick={action.method}
+                    className='flex justify-start items-center hover:text-iris'
+                >
+                    <action.icon className='mr-1' />
+                    {action.name}
+                </button>
+            ))}
         </div>
     );
 };

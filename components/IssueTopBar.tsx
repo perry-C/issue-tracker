@@ -64,7 +64,7 @@ const IssueTopBar = () => {
         </Card>
     );
     const newIssue = (
-        <Button variant='classic'>
+        <Button>
             <Link href='/issues/new'>
                 <Strong>New Issue</Strong>
             </Link>
