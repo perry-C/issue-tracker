@@ -9,18 +9,20 @@ import { useEffect, useState } from 'react';
 
 import ErrorMessage from '@/components/ErrorMessage';
 import IssueHeader from '@/components/IssueHeader';
-import IssueSidebar from '@/components/IssueSidebar';
+import IssueSidebar from '@/components/IssueSideBar';
 import SimpleMDE from 'react-simplemde-editor';
 import Spinner from '@/components/Spinner';
 import TimelineComment from '@/components/TimelineComment';
 import axios from 'axios';
 import { createIssueCommentSchema } from '@/app/validationSchemas';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 type IssueCommentInput = z.infer<typeof createIssueCommentSchema>;
 
 const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
+    const router = useRouter();
     const {
         register,
         control,
@@ -44,6 +46,15 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
             setIssue(issueObject);
             setIssueTitle(issueObject.title);
         });
+
+    const handleDeleteIssue = async () => {
+        try {
+            await axios.delete(`/api/issues/${params.issueId}`);
+            router.push('/issues');
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         fetchIssues();
@@ -108,8 +119,14 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
                             id='issue-actions-container'
                             className='flex justify-end space-x-1 mt-1'
                         >
-                            <Button variant='outline'>Close issue</Button>
-                            <Button disabled={isSubmitting}>
+                            <Button
+                                variant='outline'
+                                type='button'
+                                onClick={handleDeleteIssue}
+                            >
+                                Close issue
+                            </Button>
+                            <Button disabled={isSubmitting} type='submit'>
                                 {isSubmitting && <Spinner></Spinner>}
                                 Comment
                             </Button>
@@ -118,7 +135,10 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
                 </div>
             </div>
             <div id='issue-sidebar' className='col-span-1 m-2'>
-                <IssueSidebar issueId={issue?.id}></IssueSidebar>
+                <IssueSidebar
+                    issueId={issue?.id}
+                    handleDeleteIssue={handleDeleteIssue}
+                ></IssueSidebar>
             </div>
         </div>
     );

@@ -1,12 +1,8 @@
 'use client';
 
-import { Card, Inset, Separator } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 
-import { Issue } from '@prisma/client';
 import IssueTable from '@/components/IssueTable';
-import IssueTableRow from '../../components/IssueTableRow';
-import IssueTag from '../../components/IssueAction';
 import IssueTopBar from '../../components/IssueTopBar';
 import axios from 'axios';
 

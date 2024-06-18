@@ -8,7 +8,6 @@ import {
 import { Avatar, Popover, Separator, Strong } from '@radix-ui/themes';
 
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
 const SidebarItem = ({ name }: { name: string }) => (
@@ -33,6 +32,7 @@ const SidebarItem = ({ name }: { name: string }) => (
 
 interface Props {
     issueId: number | undefined;
+    handleDeleteIssue: any;
 }
 
 const IssueSidebar = (props: Props) => {
@@ -55,15 +55,6 @@ const IssueSidebar = (props: Props) => {
 
     const handleTransferIssue = () => {
         alert('not implemented');
-    };
-
-    const handleDeleteIssue = async () => {
-        try {
-            await axios.delete(`/api/issues/${props.issueId}`);
-            router.push('/issues');
-        } catch (error) {
-            console.error(error);
-        }
     };
 
     const sidebarActions = [
@@ -89,7 +80,7 @@ const IssueSidebar = (props: Props) => {
             id: 3,
             name: 'Delete issue',
             icon: TrashIcon,
-            method: handleDeleteIssue,
+            method: props.handleDeleteIssue,
         },
     ];
 

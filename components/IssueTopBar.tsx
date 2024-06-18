@@ -48,7 +48,9 @@ const IssueTopBar = () => {
                     className='flex flex-grow justify-center'
                 >
                     <InsetButton>
-                        <Strong>Labels</Strong>
+                        <Link href='/issues/labels'>
+                            <Strong>Labels</Strong>
+                        </Link>
                     </InsetButton>
                 </div>
                 <Separator size='2' orientation='vertical' />
