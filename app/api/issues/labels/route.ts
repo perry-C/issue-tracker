@@ -46,6 +46,16 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json(newLabel, { status: 200 });
 };
 
+export const DELETE = async (request: NextRequest) => {
+    const { id } = await request.json();
+
+    const deletedLabel = await prisma.label.delete({
+        where: { id: Number(id) },
+    });
+
+    return NextResponse.json(deletedLabel, { status: 200 });
+};
+
 export const PATCH = async (request: NextRequest) => {
     // TODO: in order to establish the LabelOnIssues relationship
     // We need to get 1. id on the label 2. id on the issue

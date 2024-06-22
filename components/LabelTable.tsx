@@ -16,9 +16,11 @@ const LabelTable = ({ labels, setLabels }: Props) => {
         <li key={key}>
             <Separator size='4' />
             <LabelTableRow
-                id={key}
+                id={label.id}
                 name={label.name}
                 description={label.description}
+                labels={labels}
+                setLabels={setLabels}
             />
         </li>
     ));
