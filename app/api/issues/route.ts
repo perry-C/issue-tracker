@@ -24,7 +24,7 @@ export async function GET() {
         const validation = createIssueSchema.safeParse(issue);
 
         if (!validation.success) {
-            return NextResponse.json(validation.error.errors, { status: 422 });
+            return NextResponse.json(validation.error.errors, { status: 400 });
         }
     });
 

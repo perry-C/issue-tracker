@@ -47,9 +47,11 @@ model LabelsOnIssues {
 // Many-to-many relationship with the model Issue 
 // (issues can have many labels, and labels can be assigned to many issues) 
 model Label {
-  id     Int              @id @default(autoincrement())
-  name   String           @db.Text
-  issues LabelsOnIssues[]
+  id          Int              @id @default(autoincrement())
+  name        String           @db.VarChar(50) @unique
+  description String           @db.Text
+  color       String           @db.VarChar(7)
+  issues      LabelsOnIssues[]
 }
 
 enum Status {

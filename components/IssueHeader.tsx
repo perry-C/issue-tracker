@@ -38,9 +38,18 @@ const IssueHeader = ({
         setIssueTitle(titleInputRef.current.value);
 
         await axios
-            .patch(`/api/issues/${issueInfo?.id}/`, {
-                newIssueTitle: titleInputRef.current.value,
-            })
+            .patch(
+                `/api/issues/${issueInfo?.id}/`,
+                {
+                    newField: titleInputRef.current.value,
+                },
+                {
+                    headers: {
+                        fieldToUpdate: 'title',
+                    },
+                }
+            )
+            .then((res) => console.log(res))
             .catch((err) => console.log(err));
         setIsEditTitle(false);
     };

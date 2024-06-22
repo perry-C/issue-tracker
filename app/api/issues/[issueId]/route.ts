@@ -5,6 +5,7 @@ import {
     createIssueSchema,
 } from '@/app/validationSchemas';
 
+import { headers } from 'next/headers';
 import prisma from '@/prisma/client';
 
 export async function GET(
@@ -81,12 +82,21 @@ export async function PATCH(
     request: NextRequest,
     { params }: { params: { issueId: number } }
 ) {
-    const { newIssueTitle } = await request.json();
+    const headersList = headers();
+    const fieldToUpdate = headersList.get('fieldToUpdate');
+    if (fieldToUpdate) {
+        const { newField } = await request.json();
 
-    const updatedIssue = await prisma.issue.update({
-        where: { id: Number(params.issueId) },
-        data: { title: newIssueTitle },
-    });
+        const updatedIssue = await prisma.issue.update({
+            where: { id: Number(params.issueId) },
+            data: { [fieldToUpdate]: newField },
+        });
 
-    return NextResponse.json(updatedIssue, { status: 200 });
+        return NextResponse.json(updatedIssue, { status: 200 });
+    } else {
+        return NextResponse.json(
+            { error: 'A update field must be declared for the PATCH request' },
+            { status: 400 }
+        );
+    }
 }
