@@ -1,34 +1,30 @@
+import React, { useEffect, useState } from 'react';
+
+import { Label } from '@prisma/client';
 import LabelMenuBar from '@/components/LabelMenuBar';
 import LabelTableRow from './LabelTableRow';
-import React from 'react';
 import { Separator } from '@radix-ui/themes';
+import axios from 'axios';
 
-interface Props {}
-// Temp for now, officially we need to fetch it from a database
-const labels = [
-    { name: 'bug', description: "Something isn't working" },
-    {
-        name: 'major-feature',
-        description: 'Features that achieves something important',
-    },
-    { name: 'quality-of-life', description: 'Small features' },
-];
+interface Props {
+    labels: Label[];
+    setLabels: any;
+}
 
-const labelTableRows = labels.map((label, key) => (
-    <li key={key}>
-        <Separator size='4' />
-        <LabelTableRow
-            id={key}
-            name={label.name}
-            description={label.description}
-        />
-    </li>
-));
-
-const LabelTable = (props: Props) => {
+const LabelTable = ({ labels, setLabels }: Props) => {
+    const labelTableRows = labels.map((label, key) => (
+        <li key={key}>
+            <Separator size='4' />
+            <LabelTableRow
+                id={key}
+                name={label.name}
+                description={label.description}
+            />
+        </li>
+    ));
     return (
         <div>
-            <LabelMenuBar />
+            <LabelMenuBar count={labels.length} />
             <ul>{labelTableRows}</ul>
         </div>
     );

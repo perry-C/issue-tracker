@@ -2,9 +2,13 @@ import { Button, Card, IconButton, Strong, TextField } from '@radix-ui/themes';
 import { MagnifyingGlassIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { PropsWithChildren, useRef, useState } from 'react';
 
+import { Label } from '@prisma/client';
 import axios from 'axios';
 
-interface Props {}
+interface Props {
+    labels: Label[];
+    setLabels: any;
+}
 
 const getRandomColor = () => {
     var letters = '0123456789ABCDEF';
@@ -15,7 +19,7 @@ const getRandomColor = () => {
     return color;
 };
 
-const LabelTopBar = (props: Props) => {
+const LabelTopBar = ({ labels, setLabels }: Props) => {
     const labelSubmissionFieldsInfo = [
         {
             name: 'Label Name',
@@ -60,7 +64,9 @@ const LabelTopBar = (props: Props) => {
         const formObject = Object.fromEntries(formData.entries());
         axios
             .post('/api/issues/labels', formObject)
-            .then((res) => console.log(res))
+            .then((res) => {
+                setLabels([...labels, res.data]);
+            })
             .catch((err) => console.log(err));
     };
 
