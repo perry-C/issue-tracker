@@ -37,8 +37,8 @@ const NewIssuePage = () => {
                         description: res.data.description,
                     });
                 },
-                (rej) => {
-                    console.error(rej);
+                (err) => {
+                    console.error(err);
                 }
             );
 

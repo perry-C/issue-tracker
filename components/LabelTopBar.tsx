@@ -1,9 +1,14 @@
 import { Button, Card, IconButton, Strong, TextField } from '@radix-ui/themes';
 import { MagnifyingGlassIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { PropsWithChildren, useRef, useState } from 'react';
+import { SubmitHandler, useForm, useFormState } from 'react-hook-form';
 
+import ErrorMessage from './ErrorMessage';
 import { Label } from '@prisma/client';
 import axios from 'axios';
+import { createLabelSchema } from '@/app/validationSchemas';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface Props {
     labels: Label[];
@@ -19,110 +24,115 @@ const getRandomColor = () => {
     return color;
 };
 
+type LabelSubmissionField = (typeof labelSubmissionFieldsInfo)[0];
+
+type LabelForm = z.infer<typeof createLabelSchema>;
+
+interface labelSubmissionFields {
+    descriptor: string;
+    name: keyof LabelForm;
+    placeHolder: string;
+}
+
+const labelSubmissionFieldsInfo: labelSubmissionFields[] = [
+    {
+        descriptor: 'Label Name',
+        name: 'name',
+        placeHolder: 'Label Name',
+    },
+    {
+        descriptor: 'Description',
+        name: 'description',
+        placeHolder: 'Description',
+    },
+    {
+        descriptor: 'Color',
+        name: 'color',
+        placeHolder: '#000000',
+    },
+];
+
 const LabelTopBar = ({ labels, setLabels }: Props) => {
-    const labelSubmissionFieldsInfo = [
-        {
-            name: 'Label Name',
-            // Which attribute on the table to change
-            attribute: 'name',
-            placeHolder: 'Label Name',
-            action: '',
-        },
-        {
-            name: 'Description',
-            attribute: 'description',
-            placeHolder: 'Description',
-            action: '',
-        },
-        {
-            name: 'Color',
-            attribute: 'color',
-            placeHolder: '#000000',
-            action: '',
-        },
-    ];
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+    } = useForm<LabelForm>({
+        mode: 'onSubmit',
+        resolver: zodResolver(createLabelSchema),
+    });
 
     const [isCreatingNewLabel, setIsCreatingNewLabel] = useState(false);
-    const colorInputFieldRef = useRef<any>(null);
+
+    const [DatabaseError, setSubmitError] = useState('');
+
+    const submitErrors = () =>
+        Object.values(errors).map((error) => {
+            return (
+                <li>
+                    <ErrorMessage>{error?.message}</ErrorMessage>
+                </li>
+            );
+        });
+
     const handleNewLabelClick = () => {
         setIsCreatingNewLabel(!isCreatingNewLabel);
     };
 
     const handleGenerateRandomColor = () => {
-        colorInputFieldRef.current.value = getRandomColor();
+        setValue('color', getRandomColor());
     };
 
     const handleCancelCreate = () => {
         setIsCreatingNewLabel(false);
     };
 
-    const handleCreateLabel = () => {
-        alert('function handleCreateLabel not implemented');
-    };
-
-    const handleFormSubmission = (formData: FormData) => {
-        const formObject = Object.fromEntries(formData.entries());
+    const onSubmit: SubmitHandler<LabelForm> = async (data: LabelForm) => {
         axios
-            .post('/api/issues/labels', formObject)
+            .post('/api/issues/labels', data)
             .then((res) => {
                 setLabels([...labels, res.data]);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                setSubmitError(err.message);
+            });
     };
 
-    const TextFieldColor = ({
-        attribute,
-        children,
-    }: {
-        attribute: string;
-        children: string;
-    }) => (
-        <div className='flex space-x-1 items-center'>
-            <IconButton onClick={handleGenerateRandomColor} type='button'>
-                <UpdateIcon />
-            </IconButton>
-            <TextField.Root
-                size='2'
-                className='w-32'
-                name={attribute}
-                placeholder={children}
-                ref={colorInputFieldRef}
-                defaultValue={getRandomColor()}
-            >
-                <TextField.Slot></TextField.Slot>
-            </TextField.Root>
-        </div>
+    const labelSubmissionFields = labelSubmissionFieldsInfo.map(
+        (item: LabelSubmissionField, key) => (
+            <li className='flex flex-col space-y-1' key={key}>
+                <Strong className=''>{item.descriptor}</Strong>
+                {item.descriptor === 'Color' ? (
+                    <div className='flex space-x-1 items-center'>
+                        <IconButton
+                            onClick={handleGenerateRandomColor}
+                            type='button'
+                        >
+                            <UpdateIcon />
+                        </IconButton>
+                        <TextField.Root
+                            size='2'
+                            className='w-32'
+                            placeholder={item.placeHolder}
+                            {...register(item.name)}
+                            defaultValue={getRandomColor()}
+                        >
+                            <TextField.Slot></TextField.Slot>
+                        </TextField.Root>
+                    </div>
+                ) : (
+                    <TextField.Root
+                        placeholder={item.placeHolder}
+                        className='w-48'
+                        {...register(item.name)}
+                    >
+                        <TextField.Slot></TextField.Slot>
+                    </TextField.Root>
+                )}
+            </li>
+        )
     );
-    const TextFieldOther = ({
-        attribute,
-        children,
-    }: {
-        attribute: string;
-        children: string;
-    }) => (
-        <TextField.Root
-            name={attribute}
-            placeholder={children}
-            className='w-48'
-        >
-            <TextField.Slot></TextField.Slot>
-        </TextField.Root>
-    );
-
-    const labelSubmissionFields = labelSubmissionFieldsInfo.map((item, key) => (
-        <li className='flex flex-col space-y-1' key={key}>
-            <Strong className=''>{item.name}</Strong>
-            {item.name === 'Color' ? (
-                <TextFieldColor attribute={item.attribute}>
-                    {item.placeHolder}
-                </TextFieldColor>
-            ) : (
-                <TextFieldOther attribute={item.attribute}>
-                    {item.placeHolder}
-                </TextFieldOther>
-            )}
-        </li>
-    ));
 
     return (
         <div id='label-top-bar' className='flex flex-col'>
@@ -148,7 +158,7 @@ const LabelTopBar = ({ labels, setLabels }: Props) => {
                 <Card id='with-create-new-label' className='mb-4'>
                     <form
                         id='label-submission-form'
-                        action={handleFormSubmission}
+                        onSubmit={handleSubmit(onSubmit)}
                     >
                         <ul className='flex flex-wrap justify-between'>
                             {labelSubmissionFields}
@@ -162,7 +172,16 @@ const LabelTopBar = ({ labels, setLabels }: Props) => {
                                 <Button type='submit'>Create Label</Button>
                             </div>
                         </ul>
+                        {errors && (
+                            <ul className='mt-2 space-y-2'>{submitErrors()}</ul>
+                        )}
                     </form>
+
+                    {DatabaseError && (
+                        <ErrorMessage className='mt-2'>
+                            The label name already exists
+                        </ErrorMessage>
+                    )}
                 </Card>
             )}
         </div>
