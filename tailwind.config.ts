@@ -15,6 +15,8 @@ const config: Config = {
             },
             colors: {
                 iris: '#6e56cf',
+                primary: '#000000',
+                secondary: '#71717A',
             },
         },
     },

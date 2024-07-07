@@ -6,8 +6,8 @@ import { Button, TextField } from '@radix-ui/themes';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import ErrorMessage from '@/components/ErrorMessage';
+import { SecondarySpinner } from '@/components/Spinner';
 import SimpleMDE from 'react-simplemde-editor';
-import Spinner from '@/components/Spinner';
 import axios from 'axios';
 import { createIssueSchema } from '@/app/validationSchemas';
 import { useRouter } from 'next/navigation';
@@ -77,7 +77,7 @@ const NewIssuePage = () => {
                 )}
                 <Button disabled={isSubmitting}>
                     Submit New Issue
-                    {isSubmitting && <Spinner></Spinner>}
+                    {isSubmitting && <SecondarySpinner></SecondarySpinner>}
                 </Button>
             </form>
         </div>

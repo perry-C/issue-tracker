@@ -10,8 +10,8 @@ import { useEffect, useState } from 'react';
 import ErrorMessage from '@/components/ErrorMessage';
 import IssueHeader from '@/components/IssueHeader';
 import IssueSidebar from '@/components/IssueSideBar';
+import { SecondarySpinner } from '@/components/Spinner';
 import SimpleMDE from 'react-simplemde-editor';
-import Spinner from '@/components/Spinner';
 import TimelineComment from '@/components/TimelineComment';
 import axios from 'axios';
 import { createIssueCommentSchema } from '@/app/validationSchemas';
@@ -127,7 +127,9 @@ const IssueDetailsPage = ({ params }: { params: { issueId: string } }) => {
                                 Close issue
                             </Button>
                             <Button disabled={isSubmitting} type='submit'>
-                                {isSubmitting && <Spinner></Spinner>}
+                                {isSubmitting && (
+                                    <SecondarySpinner></SecondarySpinner>
+                                )}
                                 Comment
                             </Button>
                         </div>

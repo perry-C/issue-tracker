@@ -5,12 +5,24 @@ import {
     LockClosedIcon,
     TrashIcon,
 } from '@radix-ui/react-icons';
-import { Avatar, Popover, Separator, Strong } from '@radix-ui/themes';
+import { Avatar, Inset, Popover, Separator, Strong } from '@radix-ui/themes';
+import React, { useEffect } from 'react';
 
-import React from 'react';
+import LabelPopover from './LabelPopover';
 import { useRouter } from 'next/navigation';
 
-const SidebarItem = ({ name }: { name: string }) => (
+interface Props {
+    issueId: number | undefined;
+    handleDeleteIssue: any;
+}
+
+const SidebarItem = ({
+    name,
+    popover,
+}: {
+    name: string;
+    popover: React.JSX.Element;
+}) => (
     <div>
         <Popover.Root>
             <Popover.Trigger>
@@ -23,27 +35,22 @@ const SidebarItem = ({ name }: { name: string }) => (
                     <GearIcon />
                 </button>
             </Popover.Trigger>
-            <Popover.Content>Content</Popover.Content>
+            <Popover.Content>
+                <Inset>{popover}</Inset>
+            </Popover.Content>
         </Popover.Root>
         <div>None yet</div>
         <Separator size='4' className='mt-2' />
     </div>
 );
 
-interface Props {
-    issueId: number | undefined;
-    handleDeleteIssue: any;
-}
+const AssigneesPopover = <div></div>;
+const LabelsPopover = <LabelPopover />;
+const ProjectsPopover = <div></div>;
+const MilestonePopover = <div></div>;
 
 const IssueSidebar = (props: Props) => {
     const router = useRouter();
-
-    const sidebarItems = [
-        { id: 0, name: 'Assignees' },
-        { id: 1, name: 'Labels' },
-        { id: 2, name: 'Projects' },
-        { id: 3, name: 'Milestones' },
-    ];
 
     const handleLockConversation = () => {
         alert('not implemented');
@@ -56,6 +63,12 @@ const IssueSidebar = (props: Props) => {
     const handleTransferIssue = () => {
         alert('not implemented');
     };
+    const sidebarItems = [
+        { id: 0, name: 'Assignees', popover: AssigneesPopover },
+        { id: 1, name: 'Labels', popover: LabelsPopover },
+        { id: 2, name: 'Projects', popover: ProjectsPopover },
+        { id: 3, name: 'Milestones', popover: MilestonePopover },
+    ];
 
     const sidebarActions = [
         {
@@ -90,19 +103,18 @@ const IssueSidebar = (props: Props) => {
             className='flex flex-col mx-2 my-2 space-y-2'
         >
             {sidebarItems.map((item) => (
-                <SidebarItem key={item.id} name={item.name} />
+                <SidebarItem
+                    key={item.id}
+                    name={item.name}
+                    popover={item.popover}
+                />
             ))}
 
-            <div>10 Participants</div>
+            <div>5 Participants</div>
             <div
                 id='sidebar-participants-container'
                 className='flex flex-wrap content-between gap-1'
             >
-                <Avatar variant='solid' fallback='A' />
-                <Avatar variant='solid' fallback='A' />
-                <Avatar variant='solid' fallback='A' />
-                <Avatar variant='solid' fallback='A' />
-                <Avatar variant='solid' fallback='A' />
                 <Avatar variant='solid' fallback='A' />
                 <Avatar variant='solid' fallback='A' />
                 <Avatar variant='solid' fallback='A' />
