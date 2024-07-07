@@ -55,16 +55,3 @@ export const DELETE = async (request: NextRequest) => {
 
     return NextResponse.json(deletedLabel, { status: 200 });
 };
-
-export const PATCH = async (request: NextRequest) => {
-    // TODO: in order to establish the LabelOnIssues relationship
-    // We need to get 1. id on the label 2. id on the issue
-    //
-    //
-    // (Choices on the endpoint URI:
-    // should take advantage of the dynamic route segment
-    // hence should be ideally PATCH request to the api/issues/labels/{labelId} URI
-    // and be updating the
-    //
-    // )
-};

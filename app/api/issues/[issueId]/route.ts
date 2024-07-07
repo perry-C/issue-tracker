@@ -1,4 +1,3 @@
-import { Issue, Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import {
     createIssueCommentSchema,
@@ -10,7 +9,7 @@ import prisma from '@/prisma/client';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { issueId: number } }
+    { params }: { params: { issueId: string } }
 ) {
     const issueRequested = await prisma.issue.findUnique({
         where: { id: Number(params.issueId) },
@@ -30,7 +29,7 @@ export async function GET(
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { issueId: number } }
+    { params }: { params: { issueId: string } }
 ) {
     const comment = await request.json();
 
@@ -65,7 +64,7 @@ export async function POST(
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { issueId: number } }
+    { params }: { params: { issueId: string } }
 ) {
     //TODO: identify if the data requested to delete conforms to the standard
     const deletePost = await prisma.issue.delete({
@@ -80,7 +79,7 @@ export async function DELETE(
 
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { issueId: number } }
+    { params }: { params: { issueId: string } }
 ) {
     const headersList = headers();
     const fieldToUpdate = headersList.get('fieldToUpdate');

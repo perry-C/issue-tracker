@@ -4,7 +4,7 @@ import prisma from '@/prisma/client';
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { commentId: number } }
+    { params }: { params: { commentId: string } }
 ) {
     try {
         const deleteComment = await prisma.issueComment.delete({
